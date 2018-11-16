@@ -1,0 +1,139 @@
+/*
+ * Class: CMSC140 CRN
+ * Instructor: Professor Tsai
+ * Project4
+ * Description: This program calculates the number of days employees are absent and sends it to the employeeAbsences.txt output file.
+ * Due Date: 11/11/18
+ * I pledge that I have completed the programming assignment independently.
+   I have not copied the code from a student or any source.
+   I have not given my code to any student.
+   Print your Name here: __Tammy Molina____
+*/
+
+#include <iostream>
+#include <fstream>
+#include<iomanip>
+#include <string>
+using namespace std;
+
+// function prototypes
+int getNumOfEmployees();
+int employeeIDsAndEmployeeAbsences(int, ofstream&);
+double calculateAvgNumOfDaysAbs(int, int);
+
+int main()
+{
+	// declare variables
+	
+	int numOfEmployees;
+	int allEmployeeAbsences;
+	double averageNumOfAbsences;
+	string programmerName = "Tammy Molina";
+	string dueDate = "11/11/18";
+
+	
+	cout << "Calculate the average number of days a company's employees are absent.\n\n";
+
+	// open employee file
+	ofstream employeeFile;
+	employeeFile.open("employeeAbsences.txt");
+
+	//get the number of employees by calling the function getNumOfEmployees
+	numOfEmployees = getNumOfEmployees();
+
+	// pass numOfEmployees to the employeeIDsAndEmployeeAbsences function and the employeeFile to the 
+	// employeeIDsAndEmployeeAbsences function
+
+	allEmployeeAbsences = employeeIDsAndEmployeeAbsences(numOfEmployees, employeeFile);
+
+	// pass the number of employees and all absences to the calculateAvgNumOfDaysAbs function
+	averageNumOfAbsences = calculateAvgNumOfDaysAbs(numOfEmployees, allEmployeeAbsences);
+
+
+	// send to output file
+	employeeFile << "\nThe "
+		<< numOfEmployees
+		<< " employees were absent a total of "
+		<< allEmployeeAbsences
+		<< " days."
+		<< "\nThe average number of days absent is "
+		<< fixed
+		<< setprecision(3)
+		<< averageNumOfAbsences
+		<< " days."
+		<< "\n\nProgrammer: "
+		<< programmerName;
+
+	employeeFile.close();
+
+	// display ending messages
+	cout << "\nPROGRAMMER:"
+		<< programmerName
+		<< "\nDue Date: "
+		<< dueDate
+		<< endl;
+
+	system("pause");
+	return 0;
+}
+
+//function definition for numberOfEmployees
+int getNumOfEmployees()
+{
+	int numOfEmployees;
+	cout << "Please enter the number of employees in the company: ";
+	cin >> numOfEmployees;
+	// input validation for num of employees
+	while (numOfEmployees < 1)
+	{
+		cout << "The number of employees must not be less than 1.\n"
+			<< "Please re-enter the numer of employees in the company: ";
+		cin >> numOfEmployees;
+	}
+	cout << endl;
+	return numOfEmployees;
+}
+
+//function defintion for employeeIDsAndEmployeeAbsences
+int employeeIDsAndEmployeeAbsences(int totalNumOfEmployees, ofstream& employeeFile)
+{
+	employeeFile << "EMPLOYEE ABSENCE REPORT\n\n"
+		<< "Employee ID"
+		<< "\t"
+		<< "Days absent\n";
+
+	int employeeID;
+	int numOfDaysAbsent;
+	int totalEmployeeAbsences = 0;
+
+	//get employee ID and number of absences for each employee
+	for (int count = 0; count < totalNumOfEmployees; count++)
+	{
+		cout << "Please enter an employee ID: ";
+		cin >> employeeID;
+		employeeFile << setw(8) << employeeID;
+
+		cout << "Please enter the number of days this employee was absent: ";
+		cin >> numOfDaysAbsent;
+		// input validation for days absent
+		while (numOfDaysAbsent < 1)
+		{
+			cout << "The number of absent days must not be less than 1.\n"
+				<< "Please re-enter the number of days absent: ";
+			cin >> numOfDaysAbsent;
+		}
+		cout << endl;
+		employeeFile << setw(16) << numOfDaysAbsent << endl;
+		totalEmployeeAbsences += numOfDaysAbsent;
+	}
+	return totalEmployeeAbsences;
+}
+
+//function definition for calculateAvgNumOfDaysAbs
+double calculateAvgNumOfDaysAbs(int totalEmployees, int employeeAbsences)
+{
+	double avgNumOfDaysAbsent;
+	avgNumOfDaysAbsent = static_cast<double>(employeeAbsences) / totalEmployees;
+
+	return avgNumOfDaysAbsent;
+}
